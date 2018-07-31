@@ -1,4 +1,6 @@
 # Folders
 node_modules
+sandbox
 
 # Files
+.env
