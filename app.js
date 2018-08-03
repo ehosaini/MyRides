@@ -4,10 +4,15 @@ const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 
+
+/* -------------------------------------- Routers ----------------------------------------- */
 const indexRouter = require('./routes/index');
 const loginRouter = require('./routes/login');
 const usersRouter = require('./routes/users');
+const userRidesRouter = require('./routes/userRides');
 
+
+/* -------------------------------------- App Setup ----------------------------------------- */
 const app = express();
 
 // view engine setup
@@ -22,15 +27,19 @@ app.use(express.urlencoded({
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+
+/* -------------------------------------- Routes ----------------------------------------- */
 app.use('/', indexRouter);
 
-/* router for handling Uber's OAuth2 flow */
+//router for handling Uber's OAuth2 flow 
 app.use('/', loginRouter);
-
 
 app.use('/users', usersRouter);
 
+app.use('/my-rides', userRidesRouter);
 
+
+/* -------------------------------------- Error Handling ----------------------------------------- */
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
   next(createError(404));

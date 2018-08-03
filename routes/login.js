@@ -63,7 +63,7 @@ router.get('/api/callback', (req, res, next) => {
     
     getUserInfo(strParams);
 
-    res.send('redircting to user homepage');
+    res.redirect('/my-rides/');
 
 });
 
