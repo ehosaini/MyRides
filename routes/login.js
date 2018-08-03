@@ -17,14 +17,16 @@ const tokenExchEndpoint = 'https://login.uber.com/oauth/v2/token';
 const userProfileEndpoint = 'https://api.uber.com/v1.2/me';
 const userActivityEndpoint = 'https://api.uber.com/v1.2/history';
 
-/* Middleware functions */
+/* Middleware & helper functions */
 const profileGetter = require('./routes-middlewares/login-middlewares');
+const loginHelpers = require('./helpers/login-helpers');
 
 
 
 
 /* Pre-declared variables */
 let authCode = null;
+let axiosActivityInstance = null;
 
 /* Step 1: Redirect user to Uber Authorization URL */
 router.get('/api/login', (req, res, next) => {
@@ -35,7 +37,7 @@ router.get('/api/login', (req, res, next) => {
 
 /* Step 2:  Recieve authorization code from Uber after user grants
 permission */
-router.get('/api/callback', function (req, res, next) {
+router.get('/api/callback', (req, res, next) => {
     authCode = req.query.code;
 
     /* Step 3: Get an access token from Uber token endpoint */
@@ -49,55 +51,19 @@ router.get('/api/callback', function (req, res, next) {
     }
 
     const strParams = querystring.stringify(accessTokenParams);
+    async function getUserInfo(params) {
+        const authToken = await loginHelpers.getAuthToken(tokenExchEndpoint, params);
+        const userInfo = await loginHelpers.getUserProfile(userProfileEndpoint, authToken['access_token']);
+        const userHistory = await loginHelpers.getUserActivities(userActivityEndpoint, authToken['access_token'], limit = 50);
+        console.log(`Updating DB with: ${userInfo, userHistory}`);
+    }
+    // const authToken = await loginHelpers.getAuthToken(tokenExchEndpoint, strParams);
+    // const userInfo = await loginHelpers.getUserProfile(userProfileEndpoint, authToken['access_token']);
+    // const userHistory = await loginHelpers.getUserActivities(userActivityEndpoint, authToken['access_token'], limit = 50);
+    
+    getUserInfo(strParams);
 
-    axios.post(tokenExchEndpoint, strParams).then(response => {
-        if (response.status !== 200) {
-            erroMessage = {
-                status: response.status,
-                statusText: response.statusText,
-                data: response.data,
-            }
-            throw Error(erroMessage);
-        }
-        const responseData = response.data;
-
-        const axiosProfileInstance = axios.create({
-            headers: {
-                Authorization: `Bearer ${responseData['access_token']}`,
-                'Accept-Language': 'en_US',
-                'Content-Type': 'application/json'
-            }
-        });
-
-        // axiosInstance.get(userProfileEndpoint)
-        //     .then(profileRes => {
-        //         res.send(profileRes.data);
-        //     }).catch(error => {throw error});
-
-        const axiosActivityInstance = axios.create({
-            headers: {
-                Authorization: `Bearer ${responseData['access_token']}`,
-                'Accept-Language': 'en_US',
-                'Content-Type': 'application/json'
-            }
-        });
-
-        axiosActivityInstance.get(userActivityEndpoint, {
-                params: {
-                    limit: 50,
-                    offset: null
-                }
-            })
-            .then(activityRes => {
-                res.send(activityRes.data);
-            }).catch(error => {
-                throw error
-            });
-
-    }).catch((error) => {
-        // res.status(400).send('ERROR! cannot access your data at this time.');
-        console.log(error);
-    });
+    res.send('redircting to user homepage');
 
 });
 
