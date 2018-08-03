@@ -1,9 +1,12 @@
-var express = require('express');
-var router = express.Router();
+const express = require('express');
+const router = express.Router();
+
+const userModelHelpers = require('./../models/model-helpers/userModelHelper');
 
 /* GET users listing. */
 router.get('/', function(req, res, next) {
-  res.send('respond with a resource');
+  const uberUserID = req.query.uuid;
+  res.send(`Got your id: ${uberUserID}`);
 });
 
 module.exports = router;
