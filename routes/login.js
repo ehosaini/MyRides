@@ -2,14 +2,11 @@ require('dotenv').config();
 /* Libraries */
 const express = require('express');
 const router = express.Router();
-const axios = require('axios');
 const querystring = require('querystring');
-
 
 /* Config values */
 const client_id = process.env.CLIENT_ID;
 const client_secret = process.env.CLIENT_SECRET;
-const server_token = process.env.SERVER_TOKEN;
 const redirect_uri = 'http://localhost:3000/api/callback';
 
 /* Uber API Endpoints */
@@ -34,7 +31,7 @@ router.get('/api/login', (req, res, next) => {
 
 /* Step 2:  Recieve authorization code from Uber after user grants
 permission */
-router.get('/api/callback', (req, res, next) => {
+router.get('/api/callback', async (req, res, next) => {
     let authCode = req.query.code;
 
     /* Step 3: Get an access token from Uber token endpoint */
@@ -49,20 +46,28 @@ router.get('/api/callback', (req, res, next) => {
 
     const strParams = querystring.stringify(accessTokenParams);
     // this function executes after user has been redirect to '/my-rides/
-    async function getUserInfo(params) {
 
-        // Get an auth bearer token
-        const authToken = await loginHelpers.getAuthToken(tokenExchEndpoint, params);
+    // Get an auth bearer token
+    const authToken = await loginHelpers.getAuthToken(tokenExchEndpoint, strParams);
+    const userInfo = await loginHelpers.getUserProfile(userProfileEndpoint, authToken['access_token']);
 
-        const userInfo = await loginHelpers.getUserProfile(userProfileEndpoint, authToken['access_token']);
+    // Redirect to user page if user is already stored in the database
+    const user = await userModelHelpers.findUser(userInfo.uuid);
+    if(user && user.uuid === userInfo.uuid){
+        // Save in cookie session prior to redirect
+        return res.redirect('/my-rides/'); 
+    }
 
+    // Save in cookie session prior to redirect
+
+    async function saveUserInfo() {
         const driveHistory = [];
+
         const userHistory = await loginHelpers.getUserActivities(userActivityEndpoint, authToken['access_token'], limit = 50);
         driveHistory.push(...userHistory.history);
 
-        // Check user history count and update if less than count returned from Uber API
-        // Uber history API only returns 50 records which is accounted for in the conditional statement
-
+        /* Check user history count and update if less than count returned from Uber API
+        Uber history API only returns 50 records which is accounted for in the conditional statement */
         let count = userHistory.count;
         savedRecords = 0; // Should be pulled from the Mongo db not zero
         offset = savedRecords;
@@ -85,12 +90,11 @@ router.get('/api/callback', (req, res, next) => {
         // save the new user in db
         await userModelHelpers.createUser(newUser);
     }
-    getUserInfo(strParams).catch(error => console.log(error));
+    saveUserInfo(strParams).catch(error => console.log(error));
 
-    res.redirect('/my-rides/');
+    res.redirect('/my-rides/'); 
 
 });
-
 
 
 module.exports = router;

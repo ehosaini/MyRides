@@ -21,8 +21,8 @@ async function checkUser(uberUUDI, dbUUID) {
 }
 
 
-//Check if user's history has changed since last visit
-async function checkUserHistory(uberCount, dbCount) {
+//Get user's history count
+async function getUserHistory(uuid) {
 
 }
 
@@ -41,7 +41,7 @@ module.exports = {
     findUser,
     findUserHistory,
     checkUser,
-    checkUserHistory,
+    getUserHistory,
     updateUserHistory,
     createUser
 }
