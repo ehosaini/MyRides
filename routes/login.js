@@ -47,18 +47,21 @@ router.get('/api/callback', async (req, res, next) => {
     const strParams = querystring.stringify(accessTokenParams);
     // this function executes after user has been redirect to '/my-rides/
 
-    // Get an auth bearer token
+    // Get an auth bearer token from Uber API & store in session
+    req.session.credentials = {};
     const authToken = await loginHelpers.getAuthToken(tokenExchEndpoint, strParams);
+    req.session.credentials['authToken'] = authToken['access_token'];
+
+    // Get user info from Uber API and store in session
     const userInfo = await loginHelpers.getUserProfile(userProfileEndpoint, authToken['access_token']);
+    req.session.credentials['uberUserID'] = userInfo.uuid;
 
     // Redirect to user page if user is already stored in the database
     const user = await userModelHelpers.findUser(userInfo.uuid);
     if(user && user.uuid === userInfo.uuid){
-        // Save in cookie session prior to redirect
+        
         return res.redirect('/my-rides/'); 
     }
-
-    // Save in cookie session prior to redirect
 
     async function saveUserInfo() {
         const driveHistory = [];
