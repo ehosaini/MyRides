@@ -20,13 +20,10 @@ const userActivityEndpoint = 'https://api.uber.com/v1.2/history';
 /* Middleware & helper functions */
 const profileGetter = require('./routes-middlewares/login-middlewares');
 const loginHelpers = require('./helpers/login-helpers');
-
-
-
+const userModelHelpers = require('./../models/model-helpers/userModelHelper');
 
 /* Pre-declared variables */
-let authCode = null;
-let axiosActivityInstance = null;
+
 
 /* Step 1: Redirect user to Uber Authorization URL */
 router.get('/api/login', (req, res, next) => {
@@ -38,7 +35,7 @@ router.get('/api/login', (req, res, next) => {
 /* Step 2:  Recieve authorization code from Uber after user grants
 permission */
 router.get('/api/callback', (req, res, next) => {
-    authCode = req.query.code;
+    let authCode = req.query.code;
 
     /* Step 3: Get an access token from Uber token endpoint */
     accessTokenParams = {
@@ -51,17 +48,44 @@ router.get('/api/callback', (req, res, next) => {
     }
 
     const strParams = querystring.stringify(accessTokenParams);
+    // this function executes after user has been redirect to '/my-rides/
     async function getUserInfo(params) {
+
+        // Get an auth bearer token
         const authToken = await loginHelpers.getAuthToken(tokenExchEndpoint, params);
+
         const userInfo = await loginHelpers.getUserProfile(userProfileEndpoint, authToken['access_token']);
+
+        const driveHistory = [];
         const userHistory = await loginHelpers.getUserActivities(userActivityEndpoint, authToken['access_token'], limit = 50);
-        console.log(`Updating DB with: ${userInfo, userHistory}`);
+        driveHistory.push(...userHistory.history);
+
+        // Check user history count and update if less than count returned from Uber API
+        // Uber history API only returns 50 records which is accounted for in the conditional statement
+
+        let count = userHistory.count;
+        savedRecords = 0; // Should be pulled from the Mongo db not zero
+        offset = savedRecords;
+
+        if (count > 50) { // Replace limit with savedRecords 
+            while (savedRecords < count) {
+                offset += 50;
+                const userHistory = await loginHelpers.getUserActivities(userActivityEndpoint, authToken['access_token'], limit = 50, offset);
+                driveHistory.push(...userHistory.history);
+                savedRecords += 50;
+            }
+        }
+
+        // Make a new user from returned Uber data
+        const newUser = {};
+        Object.keys(userInfo).forEach((key) => {
+            newUser[key] = userInfo[key];
+        });
+        newUser.history = driveHistory;
+        // save the new user in db
+        await userModelHelpers.createUser(newUser);
     }
-    // const authToken = await loginHelpers.getAuthToken(tokenExchEndpoint, strParams);
-    // const userInfo = await loginHelpers.getUserProfile(userProfileEndpoint, authToken['access_token']);
-    // const userHistory = await loginHelpers.getUserActivities(userActivityEndpoint, authToken['access_token'], limit = 50);
-    
-    getUserInfo(strParams);
+    getUserInfo(strParams).catch(error => console.log(error));
 
     res.redirect('/my-rides/');
 

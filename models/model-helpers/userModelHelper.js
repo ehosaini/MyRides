@@ -1,33 +1,47 @@
-const User = require('./../User');
+const {
+    User
+} = require('./../User');
 
 //Look up users
-async function findUser(userUberId){
-    return User.findOne({uuid: userUberId});
+async function findUser(userUberId) {
+    return User.findOne({
+        uuid: userUberId
+    });
 }
 
 //Look up user history
-async function findUserHistory(userUberId){
-    
+async function findUserHistory(userUberId) {
+
 }
 
 //Check if user is already in the database
 // UUID stands for Uber User ID
-async function checkUser(uberUUDI, dbUUID){
+async function checkUser(uberUUDI, dbUUID) {
 
 }
 
 
 //Check if user's history has changed since last visit
-async function checkUserHistory(uberCount, dbCount){
+async function checkUserHistory(uberCount, dbCount) {
 
 }
 
 //Update user history
-async function updateUserHistory(){
+async function updateUserHistory() {
 
 }
 
 //Create a new user
-async function createUser(userData){
-   
+async function createUser(userData) {
+    const user = new User(userData);
+    return user.save();
+}
+
+module.exports = {
+    findUser,
+    findUserHistory,
+    checkUser,
+    checkUserHistory,
+    updateUserHistory,
+    createUser
 }
