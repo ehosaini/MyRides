@@ -22,8 +22,42 @@ async function checkUser(uberUUDI, dbUUID) {
 
 
 //Get user's history count
-async function getUserHistory(uuid) {
+async function getSummaryHistory(uuid) {
 
+    try {
+        return User.aggregate([{
+                // stage 1: match 
+                $match: {
+                    uuid: uuid
+                }
+            },
+            {
+                // stage 3: project 
+                $project: {
+                    _id: 0,
+                    history: 1,
+                    total_count: {
+                        $sum: 1
+                    }
+                }
+            }, {
+                // stage 2: unwind hisotry collection
+                $unwind: "$history"
+            }, {
+                // stage 4: group documents by city name and count
+                $group: {
+                    _id: {
+                        city: "$history.start_city"
+                    },
+                    city_trips_count: {
+                        $sum: 1
+                    }
+                }
+            }
+        ]);
+    } catch (error) {
+        console.log(error);
+    }
 }
 
 //Update user history
@@ -41,7 +75,7 @@ module.exports = {
     findUser,
     findUserHistory,
     checkUser,
-    getUserHistory,
+    getSummaryHistory,
     updateUserHistory,
     createUser
 }

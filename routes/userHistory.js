@@ -5,8 +5,10 @@ const userModelHelpers = require('./../models/model-helpers/userModelHelper');
 
 
 /* GET users listing. */
-router.get('/', function(req, res, next) {
-  res.send('User homepage');
+router.get('/', async(req, res, next) => {
+  const uberUserID = req.query.uuid;
+  const userHistory = await userModelHelpers.getSummaryHistory(uberUserID);
+  res.send(userHistory);
 });
 
 module.exports = router;

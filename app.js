@@ -9,6 +9,7 @@ const logger = require('morgan');
 const indexRouter = require('./routes/index');
 const loginRouter = require('./routes/login');
 const usersRouter = require('./routes/users');
+const userHistoryRouter = require('./routes/userHistory');
 const userRidesRouter = require('./routes/userRides');
 
 
@@ -35,6 +36,8 @@ app.use('/', indexRouter);
 app.use('/', loginRouter);
 
 app.use('/users', usersRouter);
+
+app.use('/user-history', userHistoryRouter);
 
 app.use('/my-rides', userRidesRouter);
 
