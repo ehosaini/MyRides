@@ -21,7 +21,7 @@ async function checkUser(uberUUDI, dbUUID) {
 }
 
 
-//Get user's history count
+//Get user's summary history
 async function getSummaryHistory(uuid) {
 
     try {
@@ -60,9 +60,26 @@ async function getSummaryHistory(uuid) {
     }
 }
 
-//Update user history
-async function updateUserHistory() {
+// Sum the "city_trips_count" property for the returned object
+function countTrips(historyArray) {
+    let count = 0;
+    historyArray.forEach(element => {
+        count += element['city_trips_count'];
+    });
+    return count;
+}
 
+//Update user history
+async function updateUserHistory(uuid, data) {
+    data.forEach((obj) => {
+        findOneAndUpdate({
+            uuid: uuid
+        }, {
+            $push: {
+                history: obj
+            }
+        });
+    });
 }
 
 //Create a new user
@@ -77,5 +94,6 @@ module.exports = {
     checkUser,
     getSummaryHistory,
     updateUserHistory,
-    createUser
+    createUser,
+    countTrips
 }

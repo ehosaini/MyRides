@@ -15,7 +15,6 @@ const userProfileEndpoint = 'https://api.uber.com/v1.2/me';
 const userActivityEndpoint = 'https://api.uber.com/v1.2/history';
 
 /* Middleware & helper functions */
-const profileGetter = require('./routes-middlewares/login-middlewares');
 const loginHelpers = require('./helpers/login-helpers');
 const userModelHelpers = require('./../models/model-helpers/userModelHelper');
 

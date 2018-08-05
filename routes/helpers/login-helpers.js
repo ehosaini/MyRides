@@ -59,8 +59,6 @@ async function getUserActivities(endPoint, bearerToken, limitVal = null, offsetV
         return error;
     }
 
-
-
 }
 
 module.exports = {
