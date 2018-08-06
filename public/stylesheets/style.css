@@ -46,7 +46,7 @@ table {
 
 
 
-/* General styles */
+/* --------------------------   General styles --------------------------  */
 body {
   padding: 50px;
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
@@ -57,7 +57,7 @@ a {
 }
 
 
-/* Login page styles */
+/* --------------------------   Login page styles --------------------------  */
 
 .sign-in-url{
   width: 100px;
@@ -91,3 +91,20 @@ a {
 }
 
 
+/* --------------------------   User history on Google Maps styles --------------------------  */
+
+.container {
+  height: 100vh;
+  width: 100vw;
+
+}
+
+.row {
+  height: 100%;
+}
+
+#map {
+	height: 100%;
+	position: absolute;
+	width: 100%;
+}

@@ -4,9 +4,8 @@ block content
   div.jumbotron.vertical-center
     div.container
       div.row.d-flex.justify-content-center
-        dib.col-10.col-md-8.text-center
-          div.contents
-            div.welcome
-              h3 Users Rides Google Maps
-            div.d-flex.flex-row.justify-content-center
-
+        dib.col-12
+          div(id="map")
+block googleScript
+  script(src='/javascripts/myridesMap.js')
+  script(src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAfDhgKXnaCDHkzLusuuTW0i_XTYfHJ4gU&callback=initMap" async defer)
