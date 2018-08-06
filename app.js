@@ -9,7 +9,7 @@ const session = require('express-session');
 /* -------------------------------------- Routers ----------------------------------------- */
 const indexRouter = require('./routes/index');
 const loginRouter = require('./routes/login');
-const usersRouter = require('./routes/users');
+// const usersRouter = require('./routes/users');
 const userHistoryRouter = require('./routes/userHistory');
 const userRidesRouter = require('./routes/userRides');
 
@@ -42,7 +42,7 @@ app.use('/', indexRouter);
 //router for handling Uber's OAuth2 flow 
 app.use('/', loginRouter);
 
-app.use('/users', usersRouter);
+// app.use('/users', usersRouter);
 
 app.use('/user-history', userHistoryRouter);
 
