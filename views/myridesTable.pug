@@ -1,0 +1,21 @@
+extends layoutPages
+block append head
+  script(src='/javascripts/myridesTable.js')
+
+block content
+  div.jumbotron.vertical-center
+    div.container
+      div.row.d-flex.justify-content-center
+        dib.col-10.col-md-8.text-center
+          div.contents
+            div(class='welcome' data-uber-id=uuid)
+              h3 #{firstName}'s MyRides Summary 
+            div.d-flex.flex-row.justify-content-center
+              div.table
+                table(class="table" id="trips-summary")
+                  thead.thead-dark
+                    tr
+                      th City
+                      th # of Uber Trips
+                  tbody
+

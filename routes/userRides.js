@@ -7,7 +7,10 @@ const userModelHelpers = require('./../models/model-helpers/userModelHelper');
 /* Show users history in tabular form. */
 router.get('/', function(req, res, next) {
   res.render('myridesTable', {
-    title: 'User Rides | Table'
+    title: 'User Rides | Table',
+    authToken : 'Some token',
+    uuid: 'some user id',
+    firstName: 'Ehsan'
   });
 });
 
