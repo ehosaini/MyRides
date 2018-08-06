@@ -1,4 +1,7 @@
 extends layoutPages
+block append head
+  script(src='/javascripts/helperScripts.js')
+  script(src='/javascripts/myridesMap.js')
 
 block content
   div.jumbotron.vertical-center
@@ -7,5 +10,4 @@ block content
         dib.col-12
           div(id="map")
 block googleScript
-  script(src='/javascripts/myridesMap.js')
   script(src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAfDhgKXnaCDHkzLusuuTW0i_XTYfHJ4gU&callback=initMap" async defer)

@@ -1,4 +1,4 @@
-// Generate GoogleMap
+/* ----------------------- GoogleMap Script ------------------- */
 let map = null;
 
 function initMap() {
@@ -22,45 +22,23 @@ function dropMarker(position) {
     });
 }
 
-let userHistoryAjax = (uuid) => {
-    return $.ajax({
-        url: "/user-history",
-        type: 'GET',
-        data: {
-            uuid: `${uuid}`
-        }
-    });
-}
-
-let userHistoryPromise = (uuid) => {
-    return new Promise((resolve) => {
-        resolve(userHistoryAjax(uuid));
-    });
-}
-
-
+/* ----------------------- jQuery Script ------------------- */
 $(document).ready(async () => {
     //    const uberId = $(".welcome").data("uber-id");
     const uberId = '78711505-05d9-4afd-bc18-c43e926c292f'; // replace with session data
+    
+    // Helper scripts that fetch and process user data prior to populating it
     const data = await userHistoryPromise(uberId).then(result => result).catch(error => console.log(error));
+    const userHistory = await processUserHistory(data);
 
-    const userHistory = [];
-    data.forEach(element => {
-        const history = {};
-        const city = `city-${data.indexOf(element)}`;
-        history['city'] = element['_id']['city'];
-        history['trips_count'] = element['city_trips_count'];
-        userHistory.push(history);
-    });
-
-    // Create markes for each city that user has used Uber
+    // Create markers for each city that user has used Uber in 
     userHistory.forEach((history) => {
         let location = {
             lat: history['city']['latitude'],
             lng: history['city']['longitude']
         }
 
-        // Add new marker with 200 milisecond delay
-        setTimeout(() => dropMarker(location), 200);
+        // Add new marker with 100 millisecond delay
+        setTimeout(() => dropMarker(location), 100);
     });
 });
