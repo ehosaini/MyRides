@@ -22,7 +22,7 @@ const userModelHelpers = require('./../models/model-helpers/userModelHelper');
 
 
 /* Step 1: Redirect user to Uber Authorization URL */
-router.get('/api/login', (req, res, next) => {
+router.get('/login', (req, res, next) => {
     const authURL = `https://login.uber.com/oauth/v2/authorize?client_id=${client_id}&response_type=code`;
     res.redirect(authURL);
 
@@ -30,7 +30,7 @@ router.get('/api/login', (req, res, next) => {
 
 /* Step 2:  Recieve authorization code from Uber after user grants
 permission */
-router.get('/api/callback', async (req, res, next) => {
+router.get('/callback', async (req, res, next) => {
     let authCode = req.query.code;
 
     /* Step 3: Get an access token from Uber token endpoint */
@@ -44,8 +44,7 @@ router.get('/api/callback', async (req, res, next) => {
     }
 
     const strParams = querystring.stringify(accessTokenParams);
-    // this function executes after user has been redirect to '/my-rides/
-
+ 
     // Get an auth bearer token from Uber API & store in session
     req.session.credentials = {};
     const authToken = await loginHelpers.getAuthToken(tokenExchEndpoint, strParams);
@@ -54,6 +53,7 @@ router.get('/api/callback', async (req, res, next) => {
     // Get user info from Uber API and store in session
     const userInfo = await loginHelpers.getUserProfile(userProfileEndpoint, authToken['access_token']);
     req.session.credentials['uberUserID'] = userInfo.uuid;
+    req.session.credentials['firstName'] = userInfo['first_name'];
 
     // Redirect to user page if user is already stored in the database
     const user = await userModelHelpers.findUser(userInfo.uuid);
@@ -62,6 +62,7 @@ router.get('/api/callback', async (req, res, next) => {
         return res.redirect('/my-rides/'); 
     }
 
+    // this function executes after user has been redirected to '/my-rides/
     async function saveUserInfo() {
         const driveHistory = [];
 

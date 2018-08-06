@@ -24,10 +24,8 @@ function dropMarker(position) {
 
 /* ----------------------- jQuery Script ------------------- */
 $(document).ready(async () => {
-    //    const uberId = $(".welcome").data("uber-id");
-    const uberId = '78711505-05d9-4afd-bc18-c43e926c292f'; // replace with session data
-    
     // Helper scripts that fetch and process user data prior to populating it
+    const uberId = $("#map").data("uber-id");
     const data = await userHistoryPromise(uberId).then(result => result).catch(error => console.log(error));
     const userHistory = await processUserHistory(data);
 
@@ -38,7 +36,7 @@ $(document).ready(async () => {
             lng: history['city']['longitude']
         }
 
-        // Add new marker with 100 millisecond delay
-        setTimeout(() => dropMarker(location), 100);
+        // Add the markers with 150 millisecond delay
+        setTimeout(() => dropMarker(location), 150);
     });
 });
