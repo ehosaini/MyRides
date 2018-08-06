@@ -4,7 +4,9 @@ sandbox
 routes-middlewares
 
 # Files
+.DS_Store
 .env
+
 
 
 # Modules

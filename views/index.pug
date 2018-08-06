@@ -1,7 +1,16 @@
 extends layout
 
 block content
-  h1= title
-  p Welcome to #{title}
-  - var url = 'api/login'
-  a(href= '/' + url) Sign in With Uber
+  div.jumbotron.vertical-center
+    div.container
+      div.row.d-flex.justify-content-center
+        dib.col-10.col-md-8.text-center
+          div.contents
+            div.welcome
+              h3 Welcome to #{title}
+            div.d-flex.flex-row.justify-content-center
+              div.sign-in-url
+                - var url = 'api/login'
+                a(href='/' + url) Sign in With
+              div.uber-logo
+                image(src='/images/uber_logo.png')
