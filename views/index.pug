@@ -12,5 +12,8 @@ block content
               div.sign-in-url
                 - var url = 'api/login'
                 a(href='/' + url) Sign in With
+                if errorMessage
+                  div.alert.alert-warning 
+                    #{errorMessage}
               div.uber-logo
                 image(src='/images/uber_logo.png')

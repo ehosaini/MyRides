@@ -2,26 +2,26 @@ const {
     User
 } = require('./../User');
 
-//Look up users
+// Look up users
 async function findUser(userUberId) {
     return User.findOne({
         uuid: userUberId
     });
 }
 
-//Look up user history
+// Look up user history
 async function findUserHistory(userUberId) {
 
 }
 
-//Check if user is already in the database
+// Check if user is already in the database
 // UUID stands for Uber User ID
 async function checkUser(uberUUDI, dbUUID) {
 
 }
 
 
-//Get user's summary history
+// Get user's summary history
 async function getSummaryHistory(uuid) {
 
     try {
@@ -57,10 +57,11 @@ async function getSummaryHistory(uuid) {
         ]);
     } catch (error) {
         console.log(error);
+        return error;
     }
 }
 
-// Sum the "city_trips_count" property for the returned object
+// Sum up the "city_trips_count" property for the returned object
 function countTrips(historyArray) {
     let count = 0;
     historyArray.forEach(element => {
@@ -69,17 +70,22 @@ function countTrips(historyArray) {
     return count;
 }
 
-//Update user history
+// Update user history
 async function updateUserHistory(uuid, data) {
-    data.forEach((obj) => {
-        findOneAndUpdate({
-            uuid: uuid
-        }, {
-            $push: {
-                history: obj
-            }
+    try {
+        data.forEach((obj) => {
+            findOneAndUpdate({
+                uuid: uuid
+            }, {
+                $push: {
+                    history: obj
+                }
+            });
         });
-    });
+    } catch (erro) {
+        console.log(error);
+        return error;
+    }
 }
 
 //Create a new user

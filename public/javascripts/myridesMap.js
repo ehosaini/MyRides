@@ -9,6 +9,10 @@ function initMap() {
         },
         zoom: 4
     });
+    
+    if (!map) {
+        $("#map").append("<h3 class='text-warning'> We could not generate a map at this time, please try again later</h3>")
+    }
 }
 
 let position = null;

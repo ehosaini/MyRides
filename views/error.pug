@@ -1,7 +1,12 @@
 extends layoutIndex
 
 block content
-  h1= message
-  h2= error.status
-  h3= "Sorry we could not find that page!!"
-  pre #{error.stack}
+  div.jumbotron.vertical-center
+    div.container
+      div.row.d-flex.justify-content-center
+        dib.col-10.col-md-8.text-center
+          div.contents
+            //- h1= message
+            //- h2= error.status
+            h3 #{error.status} - This does not exist!
+            pre #{error.stack}

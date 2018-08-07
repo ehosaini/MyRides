@@ -33,6 +33,11 @@ permission */
 router.get('/callback', async (req, res, next) => {
     let authCode = req.query.code;
 
+    if(!authCode){
+        req.session.message['uberAuth'] = 'Sorry we cannot login at this time. Try again later.'
+        res.redirect('/');
+    }
+
     /* Step 3: Get an access token from Uber token endpoint */
     accessTokenParams = {
         client_secret,
@@ -57,8 +62,7 @@ router.get('/callback', async (req, res, next) => {
 
     // Redirect to user page if user is already stored in the database
     const user = await userModelHelpers.findUser(userInfo.uuid);
-    if(user && user.uuid === userInfo.uuid){
-        
+    if(user && user.uuid === userInfo.uuid){ 
         return res.redirect('/my-rides/'); 
     }
 
