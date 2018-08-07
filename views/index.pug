@@ -3,17 +3,22 @@ extends layoutIndex
 block content
   div.jumbotron.vertical-center
     div.container
-      div.row.d-flex.justify-content-center
-        dib.col-10.col-md-8.text-center
+      div.row.d-flex.justify-content-center.align-items-center
+        dib.col-10.col-md-8.text-center.content-column
           div.contents
-            div.welcome
-              h3 Welcome to MyRides
-            div.d-flex.flex-row.justify-content-center
-              div.sign-in-url
-                - var url = 'api/login'
-                a(href='/' + url) Sign in With
-                if errorMessage
-                  div.alert.alert-warning 
-                    #{errorMessage}
-              div.uber-logo
-                image(src='/images/uber_logo.png')
+            div.login-box
+              div.welcome
+                h3 Welcome to MyRides 
+              div.d-flex.flex-row.justify-content-center
+                div.d-inline
+                  div.sign-in-url.uber-logo
+                    - var url = 'api/login'
+                    //- a(href='/' + url) Sign in With
+                    P Sign in with:
+                    a(href='/' + url) 
+                      image(src='/images/uber_logo.png')
+                    if errorMessage
+                      div.alert.alert-warning 
+                        #{errorMessage}
+                  //- div.uber-logo
+                    //- image(src='/images/uber_logo.png')

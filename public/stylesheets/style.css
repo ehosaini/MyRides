@@ -58,7 +58,9 @@ a {
 
 
 /* --------------------------   Login page styles --------------------------  */
-
+.content-column{
+  height: 40%;
+}
 .sign-in-url{
   width: 100px;
   height: 70px;
@@ -74,8 +76,9 @@ a {
 }
 
 .uber-logo img {
-  width: 70px;
-  height: 70px;
+  margin-top: 5px;
+  width: 100px;
+  height: 100px;
 }
 
 .vertical-center {
