@@ -9,13 +9,20 @@ html
       script(src='https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js')
       script(src='https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.10/lodash.js')
   body
-    nav.nav.d-flex
-        div
-          a.nav-link(href='/my-rides') Table View
-        div
-          a.nav-link(href='/my-rides/map') Map View
-        div.ml-auto
-          a.nav-link(href="/logout") Logout
-    block content
-    block googleScript
-    include footer
+
+    div.vertical-center
+      div.container.uber-grey
+        div.row.d-flex.justify-content-center.no-gutters.align-items-center
+          div.col-sm-10
+            div.nav.d-flex.mt-4
+              div
+                a.nav-link(href='/my-rides') Table View
+              div
+                a.nav-link(href='/my-rides/map') Map View
+              div.ml-auto
+                a.nav-link(href="/logout") Logout
+          div.col-sm-10.map
+            block content
+                  
+  block googleScript
+  include footer

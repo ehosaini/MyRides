@@ -4,10 +4,6 @@ block append head
   script(src='/javascripts/myridesMap.js')
 
 block content
-  div.jumbotron.vertical-center
-    div.container
-      div.row.d-flex.justify-content-center.no-gutters
-        dib.col-12
-          div(id="map" data-uber-id=uuid)
+    div(id="map" data-uber-id=uuid)
 block googleScript
   script(src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAfDhgKXnaCDHkzLusuuTW0i_XTYfHJ4gU&callback=initMap" async defer)
