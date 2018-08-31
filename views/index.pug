@@ -1,24 +1,21 @@
 extends layoutIndex
 
 block content
-  div.jumbotron.vertical-center
+  div.vertical-center
     div.container
-      div.row.d-flex.justify-content-center.align-items-center
-        dib.col-10.col-md-8.text-center.content-column
-          div.contents
-            div.login-box
-              div.welcome
+      div.row.justify-content-center.align-items-center
+        div.col-sm-6.content-column.d-flex.align-items-center.justify-content-center.uber-grey
+            div.login-box.d-flex.flex-column.align-items-center
+              div.welcome.text-center
                 h3 Welcome to MyRides 
-              div.d-flex.flex-row.justify-content-center
-                div.d-inline
-                  div.sign-in-url.uber-logo
-                    - var url = 'api/login'
-                    //- a(href='/' + url) Sign in With
-                    P Sign in with:
-                    a(href='/' + url) 
-                      image(src='/images/uber_logo.png')
-                    if errorMessage
-                      div.alert.alert-warning 
-                        #{errorMessage}
-                  //- div.uber-logo
-                    //- image(src='/images/uber_logo.png')
+              div.sign-in-url
+                - var url = 'api/login'
+                //- a(href='/' + url) Sign in With
+                P Sign in with:
+                a(href='/' + url) 
+                  image(src='/images/uber_logo.png')
+                if errorMessage
+                  div.alert.alert-warning 
+                    #{errorMessage}
+              //- div.uber-logo
+                //- image(src='/images/uber_logo.png')

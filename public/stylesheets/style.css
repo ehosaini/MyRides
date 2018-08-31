@@ -56,14 +56,25 @@ a {
   color: #00B7FF;
 }
 
+.jumbotron {
+  background: white;
+}
+
+.uber-grey {
+  background: #dee3ea;
+}
 
 /* --------------------------   Login page styles --------------------------  */
 .content-column{
   height: 40%;
 }
+
+.login-box {
+  padding-bottom: 15px;
+}
 .sign-in-url{
   width: 100px;
-  height: 70px;
+  height: 100px;
 }
 
 .sign-in-url a{
@@ -75,7 +86,7 @@ a {
   transform: translateY(-50%);
 }
 
-.uber-logo img {
+.sign-in-url img {
   margin-top: 5px;
   width: 100px;
   height: 100px;
